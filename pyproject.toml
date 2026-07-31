@@ -1,6 +1,9 @@
 [project]
 name = "openai-api-compatible-image"
 version = "0.1.0"
+authors = [
+  { name="abesticode" }
+]
 description = "OpenAI API Compatible Image Generation Tool Plugin for Dify"
 readme = "README.md"
 requires-python = ">=3.12"

@@ -7,7 +7,7 @@ extra:
   python:
     source: tools/image_generate.py
 identity:
-  author: langgenius
+  author: abesticode
   description:
     en_US: Generate images from text prompt using OpenAI-compatible API and output image file
     zh_Hans: 使用 OpenAI 兼容 API 根据文本提示词生成图像并输出图像文件
