@@ -1,0 +1,286 @@
+description:
+  human:
+    en_US: Generate image from text prompt using OpenAI-compatible or Vertex API (Outputs File/Blob)
+    zh_Hans: 使用 OpenAI 兼容或 Vertex API 根据文本提示词生成图像 (输出 File/Blob 文件)
+  llm: Generate images from text prompt and return image file
+extra:
+  python:
+    source: tools/image_generate.py
+identity:
+  author: langgenius
+  description:
+    en_US: Generate images from text prompt using OpenAI-compatible API and output image file
+    zh_Hans: 使用 OpenAI 兼容 API 根据文本提示词生成图像并输出图像文件
+  label:
+    en_US: Image Generator (File Output)
+    zh_Hans: 图像生成器 (文件输出)
+  name: image_generate
+parameters:
+- form: llm
+  human_description:
+    en_US: Detailed prompt describing the image to generate
+    zh_Hans: 描述要生成的图像的提示词
+  label:
+    en_US: Prompt
+    zh_Hans: 提示词
+  llm_description: The text prompt to generate an image for
+  name: prompt
+  required: true
+  type: string
+- form: llm
+  human_description:
+    en_US: One or more input images to edit or use as reference (optional, PNG/JPEG/WebP)
+    zh_Hans: 用于编辑或引用的一个或多个输入图像（可选，PNG/JPEG/WebP）
+  label:
+    en_US: Input Image(s)
+    zh_Hans: 输入图像
+  llm_description: Optional input image(s) for image editing or image-to-image reference
+  name: images
+  required: false
+  type: files
+- form: form
+  human_description:
+    en_US: Model name override (optional, defaults to provider config)
+    zh_Hans: 覆盖模型名称（可选，默认使用 Provider 配置）
+  label:
+    en_US: Model Name
+    zh_Hans: 模型名称
+  name: model
+  required: false
+  type: string
+- default: square
+  form: form
+  human_description:
+    en_US: selecting the image size / aspect ratio
+    zh_Hans: 选择图像尺寸 / 宽高比
+  label:
+    en_US: Size / Aspect Ratio
+    zh_Hans: 尺寸 / 宽高比
+  name: size
+  options:
+  - label:
+      en_US: Square (1:1 / 1024x1024)
+      zh_Hans: 正方形 (1:1 / 1024x1024)
+    value: square
+  - label:
+      en_US: Vertical (9:16 / 1024x1792)
+      zh_Hans: 竖屏 (9:16 / 1024x1792)
+    value: vertical
+  - label:
+      en_US: Horizontal (16:9 / 1792x1024)
+      zh_Hans: 横屏 (16:9 / 1792x1024)
+    value: horizontal
+  - label:
+      en_US: Standard 4:3
+      zh_Hans: 标准 4:3
+    value: "4:3"
+  - label:
+      en_US: Portrait 3:4
+      zh_Hans: 肖像 3:4
+    value: "3:4"
+  required: false
+  type: select
+- default: 1K
+  form: form
+  human_description:
+    en_US: Image resolution - affects pixel size for DALL-E endpoints and image_size for Chat Completions/Vertex
+    zh_Hans: 图像分辨率 - 影响 DALL-E 端点的像素尺寸和 Chat Completions/Vertex 的 image_size
+  label:
+    en_US: Image Resolution
+    zh_Hans: 图像分辨率
+  name: image_resolution
+  options:
+  - label:
+      en_US: 1K
+      zh_Hans: 1K
+    value: 1K
+  - label:
+      en_US: 2K
+      zh_Hans: 2K
+    value: 2K
+  - label:
+      en_US: 4K
+      zh_Hans: 4K
+    value: 4K
+  required: false
+  type: select
+- default: image/png
+  form: form
+  human_description:
+    en_US: Output MIME format for generated image
+    zh_Hans: 生成图像的输出 MIME 格式
+  label:
+    en_US: Output Mime Type
+    zh_Hans: 输出 MIME 格式
+  name: output_mime_type
+  options:
+  - label:
+      en_US: PNG (image/png)
+      zh_Hans: PNG (image/png)
+    value: image/png
+  - label:
+      en_US: JPEG (image/jpeg)
+      zh_Hans: JPEG (image/jpeg)
+    value: image/jpeg
+  - label:
+      en_US: WEBP (image/webp)
+      zh_Hans: WEBP (image/webp)
+    value: image/webp
+  required: false
+  type: select
+- default: 1.0
+  form: form
+  human_description:
+    en_US: Sampling temperature (0.0 to 2.0)
+    zh_Hans: 采样温度 (0.0 到 2.0)
+  label:
+    en_US: Temperature
+    zh_Hans: 采样温度
+  max: 2.0
+  min: 0.0
+  name: temperature
+  required: false
+  type: number
+- default: 0.95
+  form: form
+  human_description:
+    en_US: Top P sampling threshold
+    zh_Hans: Top P 采样阈值
+  label:
+    en_US: Top P
+    zh_Hans: Top P
+  max: 1.0
+  min: 0.0
+  name: top_p
+  required: false
+  type: number
+- default: MINIMAL
+  form: form
+  human_description:
+    en_US: Thinking configuration level for reasoning image models
+    zh_Hans: 推理图像模型的思考配置级别
+  label:
+    en_US: Thinking Level
+    zh_Hans: 思考级别
+  name: thinking_level
+  options:
+  - label:
+      en_US: Minimal
+      zh_Hans: Minimal (最小)
+    value: MINIMAL
+  - label:
+      en_US: Low
+      zh_Hans: Low (低)
+    value: LOW
+  - label:
+      en_US: Medium
+      zh_Hans: Medium (中)
+    value: MEDIUM
+  - label:
+      en_US: High
+      zh_Hans: High (高)
+    value: HIGH
+  - label:
+      en_US: "Off"
+      zh_Hans: "Off (关闭)"
+    value: "OFF"
+  required: false
+  type: select
+- default: "OFF"
+  form: form
+  human_description:
+    en_US: Safety settings threshold
+    zh_Hans: 安全设置阈值
+  label:
+    en_US: Safety Threshold
+    zh_Hans: 安全设置阈值
+  name: safety_settings
+  options:
+  - label:
+      en_US: Off (BLOCK_NONE)
+      zh_Hans: 关闭 (BLOCK_NONE)
+    value: "OFF"
+  - label:
+      en_US: Block Few
+      zh_Hans: 过滤极少
+    value: BLOCK_FEW
+  - label:
+      en_US: Block Some
+      zh_Hans: 过滤部分
+    value: BLOCK_SOME
+  - label:
+      en_US: Block Most
+      zh_Hans: 严格过滤
+    value: BLOCK_MOST
+  required: false
+  type: select
+- default: standard
+  form: form
+  human_description:
+    en_US: selecting the image quality (for DALL-E endpoints)
+    zh_Hans: 选择图像质量 (适用于 DALL-E 端点)
+  label:
+    en_US: Image Quality (DALL-E)
+    zh_Hans: 图像质量 (DALL-E)
+  name: quality
+  options:
+  - label:
+      en_US: Standard
+      zh_Hans: 标准
+    value: standard
+  - label:
+      en_US: HD
+      zh_Hans: 高清
+    value: hd
+  required: false
+  type: select
+- default: vivid
+  form: form
+  human_description:
+    en_US: selecting the image style (for DALL-E endpoints)
+    zh_Hans: 选择图像风格 (适用于 DALL-E 端点)
+  label:
+    en_US: Image Style (DALL-E)
+    zh_Hans: 图像风格 (DALL-E)
+  name: style
+  options:
+  - label:
+      en_US: Vivid
+      zh_Hans: 生动
+    value: vivid
+  - label:
+      en_US: Natural
+      zh_Hans: 自然
+    value: natural
+  required: false
+  type: select
+- form: form
+  human_description:
+    en_US: Optional random seed ID
+    zh_Hans: 可选随机种子 ID
+  label:
+    en_US: Seed ID
+    zh_Hans: 种子 ID
+  name: seed_id
+  required: false
+  type: string
+- default: disabled
+  form: form
+  human_description:
+    en_US: Enable watermark on generated image (for providers like BytePlus that support it)
+    zh_Hans: 在生成的图像上启用水印 (适用于 BytePlus 等支持该功能的提供商)
+  label:
+    en_US: Watermark
+    zh_Hans: 水印
+  name: watermark
+  options:
+  - label:
+      en_US: Disabled
+      zh_Hans: 关闭
+    value: disabled
+  - label:
+      en_US: Enabled
+      zh_Hans: 开启
+    value: enabled
+  required: false
+  type: select

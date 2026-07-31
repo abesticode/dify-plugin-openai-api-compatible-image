@@ -1,0 +1,34 @@
+identity:
+  name: "openai_api_compatible_image"
+  author: "abesticode"
+  label:
+    en_US: "openai_api_compatible_image"
+    zh_Hans: "openai_api_compatible_image"
+    pt_BR: "openai_api_compatible_image"
+    ja_JP: "openai_api_compatible_image"
+description:
+  human:
+    en_US: "OpenAI-compatible and Vertex AI multimodal image generation and editing tool plugin (outputs File/Blob)."
+    zh_Hans: "OpenAI-compatible and Vertex AI multimodal image generation and editing tool plugin (outputs File/Blob)."
+    pt_BR: "OpenAI-compatible and Vertex AI multimodal image generation and editing tool plugin (outputs File/Blob)."
+    ja_JP: "OpenAI-compatible and Vertex AI multimodal image generation and editing tool plugin (outputs File/Blob)."
+  llm: "OpenAI-compatible and Vertex AI multimodal image generation and editing tool plugin (outputs File/Blob)."
+parameters:
+  - name: query
+    type: string
+    required: true
+    label:
+      en_US: Query string
+      zh_Hans: 查询语句
+      pt_BR: Query string
+      ja_JP: クエリ文字列
+    human_description:
+      en_US: "OpenAI-compatible and Vertex AI multimodal image generation and editing tool plugin (outputs File/Blob)."
+      zh_Hans: "OpenAI-compatible and Vertex AI multimodal image generation and editing tool plugin (outputs File/Blob)."
+      pt_BR: "OpenAI-compatible and Vertex AI multimodal image generation and editing tool plugin (outputs File/Blob)."
+      ja_JP: "OpenAI-compatible and Vertex AI multimodal image generation and editing tool plugin (outputs File/Blob)."
+    llm_description: "OpenAI-compatible and Vertex AI multimodal image generation and editing tool plugin (outputs File/Blob)."
+    form: llm
+extra:
+  python:
+    source: tools/openai_api_compatible_image.py
