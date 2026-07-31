@@ -284,6 +284,7 @@ class ImageGenerateTool(Tool):
             yield self.create_text_message(f"No image returned by API. Raw Response: {raw_preview}")
             return
 
+        success_count = 0
         for img_val in images_data:
             if not isinstance(img_val, str):
                 continue
@@ -310,3 +311,7 @@ class ImageGenerateTool(Tool):
                 blob=blob_bytes,
                 meta={"mime_type": mime_type}
             )
+            success_count += 1
+
+        if success_count > 0:
+            yield self.create_text_message(f"Successfully generated {success_count} image(s).")
