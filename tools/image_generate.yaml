@@ -51,33 +51,45 @@ parameters:
 - default: square
   form: form
   human_description:
-    en_US: selecting the image size / aspect ratio
-    zh_Hans: 选择图像尺寸 / 宽高比
+    en_US: Image size / aspect ratio preset (1:1, 9:16, 16:9, 4:3, 3:4, 3:2, 2:3, 21:9) or custom pixel resolution (e.g. 2848x1600)
+    zh_Hans: 图像尺寸 / 宽高比预设 (1:1, 9:16, 16:9, 4:3, 3:4, 3:2, 2:3, 21:9) 或自定义像素分辨率 (例如 2848x1600)
   label:
     en_US: Size / Aspect Ratio
     zh_Hans: 尺寸 / 宽高比
   name: size
   options:
   - label:
-      en_US: Square (1:1 / 1024x1024)
-      zh_Hans: 正方形 (1:1 / 1024x1024)
+      en_US: Square (1:1)
+      zh_Hans: 正方形 (1:1)
     value: square
   - label:
-      en_US: Vertical (9:16 / 1024x1792)
-      zh_Hans: 竖屏 (9:16 / 1024x1792)
+      en_US: Vertical (9:16)
+      zh_Hans: 竖屏 (9:16)
     value: vertical
   - label:
-      en_US: Horizontal (16:9 / 1792x1024)
-      zh_Hans: 横屏 (16:9 / 1792x1024)
+      en_US: Horizontal (16:9)
+      zh_Hans: 横屏 (16:9)
     value: horizontal
   - label:
-      en_US: Standard 4:3
-      zh_Hans: 标准 4:3
+      en_US: Standard (4:3)
+      zh_Hans: 标准 (4:3)
     value: "4:3"
   - label:
-      en_US: Portrait 3:4
-      zh_Hans: 肖像 3:4
+      en_US: Portrait (3:4)
+      zh_Hans: 肖像 (3:4)
     value: "3:4"
+  - label:
+      en_US: Landscape (3:2)
+      zh_Hans: 横屏 (3:2)
+    value: "3:2"
+  - label:
+      en_US: Portrait (2:3)
+      zh_Hans: 竖屏 (2:3)
+    value: "2:3"
+  - label:
+      en_US: Ultrawide (21:9)
+      zh_Hans: 超宽屏 (21:9)
+    value: "21:9"
   required: false
   type: select
 - default: 1K
@@ -95,9 +107,17 @@ parameters:
       zh_Hans: 1K
     value: 1K
   - label:
+      en_US: 1.5K
+      zh_Hans: 1.5K
+    value: 1.5K
+  - label:
       en_US: 2K
       zh_Hans: 2K
     value: 2K
+  - label:
+      en_US: 3K
+      zh_Hans: 3K
+    value: 3K
   - label:
       en_US: 4K
       zh_Hans: 4K

@@ -78,35 +78,72 @@ class ImageGenerateTool(Tool):
         if not isinstance(input_images, list):
             input_images = [input_images]
 
+        model_lower = str(model).lower()
+        if any(m in model_lower for m in ["seedream-4-5", "seedream-4.5", "seedream-4_5", "seedream-5-0-lite", "seedream-5.0-lite", "seedream-5_0_lite"]):
+            if image_resolution in ["1K", "1.5K"]:
+                image_resolution = "2K"
+
         size_mapping_dalle = {
             "1K": {
-                "square": "1024x1024",
-                "vertical": "1024x1792",
-                "horizontal": "1792x1024",
-                "4:3": "1024x768",
-                "3:4": "768x1024",
+                "square": "1024x1024", "1:1": "1024x1024",
+                "vertical": "800x1424", "9:16": "800x1424",
+                "horizontal": "1424x800", "16:9": "1424x800",
+                "4:3": "1152x864",
+                "3:4": "864x1152",
+                "3:2": "1248x832",
+                "2:3": "832x1248",
+                "21:9": "1568x672",
+            },
+            "1.5K": {
+                "square": "1536x1536", "1:1": "1536x1536",
+                "vertical": "1152x2048", "9:16": "1152x2048",
+                "horizontal": "2048x1152", "16:9": "2048x1152",
+                "4:3": "1792x1344",
+                "3:4": "1344x1792",
+                "3:2": "1872x1248",
+                "2:3": "1248x1872",
+                "21:9": "2352x1008",
             },
             "2K": {
-                "square": "2048x2048",
-                "vertical": "1152x2048",
-                "horizontal": "2048x1152",
-                "4:3": "2048x1536",
-                "3:4": "1536x2048",
+                "square": "2048x2048", "1:1": "2048x2048",
+                "vertical": "1600x2848", "9:16": "1600x2848",
+                "horizontal": "2848x1600", "16:9": "2848x1600",
+                "4:3": "2304x1728",
+                "3:4": "1728x2304",
+                "3:2": "2496x1664",
+                "2:3": "1664x2496",
+                "21:9": "3136x1344",
+            },
+            "3K": {
+                "square": "3072x3072", "1:1": "3072x3072",
+                "vertical": "2304x4096", "9:16": "2304x4096",
+                "horizontal": "4096x2304", "16:9": "4096x2304",
+                "4:3": "3456x2592",
+                "3:4": "2592x3456",
+                "3:2": "3744x2496",
+                "2:3": "2496x3744",
+                "21:9": "4704x2016",
             },
             "4K": {
-                "square": "4096x4096",
-                "vertical": "2304x4096",
-                "horizontal": "4096x2304",
-                "4:3": "4096x3072",
-                "3:4": "3072x4096",
+                "square": "4096x4096", "1:1": "4096x4096",
+                "vertical": "3040x5504", "9:16": "3040x5504",
+                "horizontal": "5504x3040", "16:9": "5504x3040",
+                "4:3": "4704x3520",
+                "3:4": "3520x4704",
+                "3:2": "4992x3328",
+                "2:3": "3328x4992",
+                "21:9": "6240x2656",
             },
         }
         aspect_ratio_mapping = {
-            "square": "1:1",
-            "vertical": "9:16",
-            "horizontal": "16:9",
+            "square": "1:1", "1:1": "1:1",
+            "vertical": "9:16", "9:16": "9:16",
+            "horizontal": "16:9", "16:9": "16:9",
             "4:3": "4:3",
             "3:4": "3:4",
+            "3:2": "3:2",
+            "2:3": "2:3",
+            "21:9": "21:9",
         }
 
         headers = {
@@ -234,8 +271,31 @@ class ImageGenerateTool(Tool):
                 return
         else:
             url = base_url + "images/generations"
-            resolution_sizes = size_mapping_dalle.get(image_resolution, size_mapping_dalle["1K"])
-            size_val = resolution_sizes.get(size_key, resolution_sizes.get("square", "1024x1024"))
+
+            # Special size handling for official OpenAI DALL-E models & Custom pixel resolution string (e.g. 2848x1600)
+            if re.match(r"^\d+x\d+$", size_key, re.IGNORECASE):
+                size_val = size_key
+            elif "dall-e-3" in model_lower or "dalle-3" in model_lower:
+                if size_key in ["vertical", "9:16", "3:4", "2:3"]:
+                    size_val = "1024x1792"
+                elif size_key in ["horizontal", "16:9", "4:3", "3:2", "21:9"]:
+                    size_val = "1792x1024"
+                else:
+                    size_val = "1024x1024"
+            elif "dall-e-2" in model_lower or "dalle-2" in model_lower:
+                size_val = "1024x1024"
+            else:
+                resolution_sizes = size_mapping_dalle.get(image_resolution, size_mapping_dalle.get("2K", size_mapping_dalle["1K"]))
+                size_val = resolution_sizes.get(size_key, resolution_sizes.get(size_key.lower(), resolution_sizes.get("square", "1024x1024")))
+
+            # Universal safety check for Seedream models requiring min 3,686,400 pixels
+            try:
+                w_str, h_str = size_val.split("x")
+                if int(w_str) * int(h_str) < 3686400 and any(m in model_lower for m in ["seedream-4-5", "seedream-4.5", "seedream-4_5", "seedream-5-0-lite", "seedream-5.0-lite", "seedream-5_0_lite"]):
+                    size_val = size_mapping_dalle["2K"].get(size_key, "2048x2048")
+            except Exception:
+                pass
+
             payload = {
                 "model": model,
                 "prompt": prompt,
